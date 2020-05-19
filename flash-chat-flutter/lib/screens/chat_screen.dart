@@ -56,32 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: messageStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                      child: CircularProgressIndicator(
-                    backgroundColor: Colors.lightBlueAccent,
-                  ));
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                      children: snapshot.data.documents
-                          .map((message) => Text(
-                                message.data['text'] +
-                                    ' from:' +
-                                    message.data['sender'],
-                              ))
-                          .toList());
-                } else {
-                  return SizedBox(
-                    height: 0.0,
-                    width: 0.0,
-                  );
-                }
-              },
-            ),
+            Messages(messageStream),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -113,6 +88,93 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Messages extends StatelessWidget {
+  final Stream<QuerySnapshot> messageStream;
+
+  const Messages(this.messageStream);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: messageStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+              child: CircularProgressIndicator(
+            backgroundColor: Colors.lightBlueAccent,
+          ));
+        }
+        if (snapshot.hasData) {
+          return Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 20.0,
+              ),
+              children: snapshot.data.documents
+                  .map((message) => MessageBubble(
+                        message: message.data['text'],
+                        sender: message.data['sender'],
+                      ))
+                  .toList(),
+            ),
+          );
+        } else {
+          return SizedBox(
+            height: 0.0,
+            width: 0.0,
+          );
+        }
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  final String message, sender;
+
+  const MessageBubble({this.message, this.sender});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Text(
+            sender,
+            style: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+          Material(
+            elevation: 4.0,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+              bottomLeft: Radius.circular(12.0),
+            ),
+            color: Colors.lightBlueAccent,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 16.0,
+              ),
+              child: Text(
+                message,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
