@@ -57,7 +57,10 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Messages(messageStream),
+            Messages(
+              messageStream,
+              user,
+            ),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -98,8 +101,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class Messages extends StatelessWidget {
   final Stream<QuerySnapshot> messageStream;
+  final FirebaseUser user;
 
-  const Messages(this.messageStream);
+  const Messages(this.messageStream, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +111,12 @@ class Messages extends StatelessWidget {
       stream: messageStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-              child: CircularProgressIndicator(
-            backgroundColor: Colors.lightBlueAccent,
-          ));
+          return Expanded(
+            child: Center(
+                child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlueAccent,
+            )),
+          );
         }
         if (snapshot.hasData) {
           return Expanded(
@@ -123,6 +129,7 @@ class Messages extends StatelessWidget {
                   .map((message) => MessageBubble(
                         message: message.data['text'],
                         sender: message.data['sender'],
+                        fromSelf: user.email == message.data['sender'],
                       ))
                   .toList(),
             ),
@@ -140,15 +147,17 @@ class Messages extends StatelessWidget {
 
 class MessageBubble extends StatelessWidget {
   final String message, sender;
+  final bool fromSelf;
 
-  const MessageBubble({this.message, this.sender});
+  const MessageBubble({this.message, this.sender, this.fromSelf});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            fromSelf ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: <Widget>[
           Text(
             sender,
@@ -158,12 +167,18 @@ class MessageBubble extends StatelessWidget {
           ),
           Material(
             elevation: 4.0,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.0),
-              topRight: Radius.circular(12.0),
-              bottomLeft: Radius.circular(12.0),
-            ),
-            color: Colors.lightBlueAccent,
+            borderRadius: fromSelf
+                ? BorderRadius.only(
+                    topRight: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                    bottomLeft: Radius.circular(12.0),
+                  )
+                : BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                    bottomLeft: Radius.circular(12.0),
+                  ),
+            color: fromSelf ? Colors.grey[300] : Colors.lightBlueAccent,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
