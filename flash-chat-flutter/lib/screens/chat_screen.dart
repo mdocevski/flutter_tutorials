@@ -20,7 +20,9 @@ class _ChatScreenState extends State<ChatScreen> {
   Stream<QuerySnapshot> messageStream;
 
   void initMessagesStream() async {
-    messageStream = _firestore.collection('messages').snapshots();
+    setState(() {
+      messageStream = _firestore.collection('messages').snapshots();
+    });
   }
 
   void getCurrentUser() async {
@@ -28,6 +30,9 @@ class _ChatScreenState extends State<ChatScreen> {
       final FirebaseUser user = await _auth.currentUser();
       if (user != null) {
         this.user = user;
+        initMessagesStream();
+      } else {
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -38,7 +43,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     getCurrentUser();
-    initMessagesStream();
   }
 
   @override
