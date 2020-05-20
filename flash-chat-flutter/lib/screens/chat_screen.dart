@@ -121,11 +121,12 @@ class Messages extends StatelessWidget {
         if (snapshot.hasData) {
           return Expanded(
             child: ListView(
+              reverse: true,
               padding: EdgeInsets.symmetric(
                 horizontal: 10.0,
                 vertical: 20.0,
               ),
-              children: snapshot.data.documents
+              children: snapshot.data.documents.reversed
                   .map((message) => MessageBubble(
                         message: message.data['text'],
                         sender: message.data['sender'],
