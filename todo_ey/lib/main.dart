@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_ey/tasks/tasks.dart';
+import 'package:todo_ey/ui/tasks/tasks_screen.dart';
 
 void main() {
   runApp(MyApp());

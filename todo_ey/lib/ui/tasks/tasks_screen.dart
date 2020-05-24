@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_ey/data/task_model.dart';
 
 class TasksScreen extends StatefulWidget {
   static const String ID = 'tasks';
@@ -63,6 +64,12 @@ class _TasksScreenState extends State<TasksScreen> {
           SizedBox(height: 40.0),
           Expanded(
             child: Container(
+              child: TasksList(
+                tasks: tasks,
+                onChanged: (index, newTaskDonenes) {
+                  onTaskCheckChanged(index, newTaskDonenes);
+                },
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -76,4 +83,16 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
     );
   }
+
+  void onTaskCheckChanged(int taskIndex, bool newTaskDonenes) {
+    setState(() {
+      tasks[taskIndex] = tasks[taskIndex].copyWith(done: newTaskDonenes);
+    });
+  }
+
+  List<Task> tasks = [
+    Task(description: 'Buy egs', done: false),
+    Task(description: 'Do dishes', done: false),
+    Task(description: 'Excercise 15min', done: false),
+  ];
 }
