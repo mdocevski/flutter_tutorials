@@ -24,6 +24,7 @@ class _TasksScreenState extends State<TasksScreen> {
           showModalBottomSheet(
             context: context,
             shape: kBottomSheetShape,
+            isScrollControlled: true,
             builder: (context) => AddTaskBottomSheet(),
           );
         },
