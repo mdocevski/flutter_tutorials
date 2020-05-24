@@ -16,7 +16,7 @@ class TasksList extends StatelessWidget {
     return ListView.builder(
       padding: EdgeInsets.symmetric(
         vertical: 24.0,
-        horizontal: 20.0,
+        horizontal: 32.0,
       ),
       itemCount: tasks.length,
       itemBuilder: (context, index) {
