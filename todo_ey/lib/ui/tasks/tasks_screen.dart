@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:todo_ey/data/task_model.dart';
 import 'package:todo_ey/ui/tasks/task_list.dart';
 
+import '../constants.dart';
+import 'add_task_sheet.dart';
+
 class TasksScreen extends StatefulWidget {
   static const String ID = 'tasks';
 
@@ -17,7 +20,13 @@ class _TasksScreenState extends State<TasksScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: kBottomSheetShape,
+            builder: (context) => AddTaskBottomSheet(),
+          );
+        },
       ),
       backgroundColor: Colors.lightBlueAccent,
       body: Column(
