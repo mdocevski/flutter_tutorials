@@ -66,7 +66,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
                 SizedBox(height: 4.0),
                 Text(
-                  '12 Tasks',
+                  '${tasks.length == 0 ? "No" : tasks.length} tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
