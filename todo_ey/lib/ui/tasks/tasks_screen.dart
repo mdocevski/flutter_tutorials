@@ -77,9 +77,7 @@ class _TasksScreenState extends State<TasksScreen> {
             child: Container(
               child: TasksList(
                 tasks: tasks,
-                onChanged: (index, newTaskDonenes) {
-                  onTaskCheckChanged(index, newTaskDonenes);
-                },
+                onChanged: onTaskCheckChanged,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
