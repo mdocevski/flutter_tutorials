@@ -25,7 +25,10 @@ class _TasksScreenState extends State<TasksScreen> {
             context: context,
             shape: kBottomSheetShape,
             isScrollControlled: true,
-            builder: (context) => AddTaskBottomSheet(),
+            builder: (context) => AddTaskBottomSheet(onTaskAdded: (task) {
+              onTaskAdded(task);
+              Navigator.pop(context);
+            }),
           );
         },
       ),
@@ -96,6 +99,12 @@ class _TasksScreenState extends State<TasksScreen> {
   void onTaskCheckChanged(int taskIndex, bool newTaskDonenes) {
     setState(() {
       tasks[taskIndex] = tasks[taskIndex].copyWith(done: newTaskDonenes);
+    });
+  }
+
+  void onTaskAdded(String taskDescription) {
+    setState(() {
+      tasks.add(Task(description: taskDescription, done: false));
     });
   }
 
