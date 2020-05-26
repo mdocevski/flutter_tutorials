@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:todo_ey/data/task_model.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_ey/ui/tasks/task_list.dart';
+import 'package:todo_ey/ui/tasks/tasks_model.dart';
 
 import '../constants.dart';
 import 'add_task_sheet.dart';
 
-class TasksScreen extends StatefulWidget {
-  static const String ID = 'tasks';
-
-  TasksScreen({Key key}) : super(key: key);
-
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
+class TasksScreen extends StatelessWidget {
+  static const ID = "tasks";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +18,7 @@ class _TasksScreenState extends State<TasksScreen> {
             context: context,
             shape: kBottomSheetShape,
             isScrollControlled: true,
-            builder: (context) => AddTaskBottomSheet(onTaskAdded: (task) {
-              onTaskAdded(task);
-              Navigator.pop(context);
-            }),
+            builder: (context) => AddTaskBottomSheet(),
           );
         },
       ),
@@ -65,23 +55,14 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 SizedBox(height: 4.0),
-                Text(
-                  '${tasks.length == 0 ? "No" : tasks.length} tasks',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
+                TasksCounter(),
               ],
             ),
           ),
           SizedBox(height: 40.0),
           Expanded(
             child: Container(
-              child: TasksList(
-                tasks: tasks,
-                onChanged: onTaskCheckChanged,
-              ),
+              child: TasksList(),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -95,22 +76,19 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
     );
   }
+}
 
-  void onTaskCheckChanged(int taskIndex, bool newTaskDonenes) {
-    setState(() {
-      tasks[taskIndex] = tasks[taskIndex].copyWith(done: newTaskDonenes);
-    });
+class TasksCounter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TasksModel>(
+      builder: (context, tasksData, child) => Text(
+        '${tasksData.taskCount == 0 ? "No" : tasksData.taskCount} tasks',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20.0,
+        ),
+      ),
+    );
   }
-
-  void onTaskAdded(String taskDescription) {
-    setState(() {
-      tasks.add(Task(description: taskDescription, done: false));
-    });
-  }
-
-  List<Task> tasks = [
-    Task(description: 'Buy egs', done: false),
-    Task(description: 'Do dishes', done: false),
-    Task(description: 'Excercise 15min', done: false),
-  ];
 }

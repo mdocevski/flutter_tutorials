@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_ey/ui/tasks/tasks_model.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  final Function(String) onTaskAdded;
-  AddTaskBottomSheet({@required this.onTaskAdded});
-
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
 }
@@ -73,7 +72,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 color: Colors.lightBlueAccent,
                 onPressed: taskText != null
                     ? () {
-                        widget.onTaskAdded(taskText);
+                        context.read<TasksModel>().addTask(taskText);
+                        Navigator.pop(context);
                       }
                     : null,
                 padding: EdgeInsets.symmetric(vertical: 16.0),
