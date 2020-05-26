@@ -4,7 +4,7 @@ import 'package:clima/services/location.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const String openWeatherMapApiKey = 'f0267949db16a4fdddd6f97c40fc5b8f';
+const String openWeatherMapApiKey = 'PLACE_KEY_HERE';
 const String openWeatherMapApiBaseUri =
     'https://api.openweathermap.org/data/2.5';
 
