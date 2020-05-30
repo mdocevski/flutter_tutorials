@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_ey/data/task_model.dart';
+import 'package:todo_ey/ui/tasks/tasks_model.dart';
 
 class TaskListItem extends StatelessWidget {
   final Task task;
-  final Function(bool) onChanged;
+  final int taskIndexInList;
 
-  const TaskListItem(this.task, this.onChanged);
+  const TaskListItem(this.task, this.taskIndexInList);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,9 @@ class TaskListItem extends StatelessWidget {
         ),
         selected: task.done,
         value: task.done,
-        onChanged: onChanged,
+        onChanged: (newValue) {
+          context.read<TasksModel>().setTaskDonenes(taskIndexInList, newValue);
+        },
       ),
     );
   }

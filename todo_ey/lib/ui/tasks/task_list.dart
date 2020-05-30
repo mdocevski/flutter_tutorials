@@ -14,9 +14,7 @@ class TasksList extends StatelessWidget {
         ),
         itemCount: tasksData.taskCount,
         itemBuilder: (context, index) {
-          return TaskListItem(tasksData.tasks[index], (newValue) {
-            context.read<TasksModel>().changeTaskDonenes(index, newValue);
-          });
+          return TaskListItem(tasksData.tasks[index], index);
         },
       ),
     );
