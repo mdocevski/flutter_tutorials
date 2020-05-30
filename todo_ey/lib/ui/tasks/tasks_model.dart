@@ -28,4 +28,9 @@ class TasksModel with ChangeNotifier {
   int get taskCount => _tasks.length;
 
   UnmodifiableListView<Task> get tasks => UnmodifiableListView(_tasks);
+
+  void deleteTask(int taskIndexInList) {
+    _tasks.removeAt(taskIndexInList);
+    notifyListeners();
+  }
 }

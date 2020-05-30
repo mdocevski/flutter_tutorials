@@ -11,24 +11,29 @@ class TaskListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTileTheme(
-      contentPadding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0.0),
-      child: CheckboxListTile(
-        title: Text(
-          task.description,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w500,
-            decoration:
-                task.done ? TextDecoration.lineThrough : TextDecoration.none,
+    return GestureDetector(
+      onLongPress: (){
+        context.read<TasksModel>().deleteTask(taskIndexInList);
+      },
+          child: ListTileTheme(
+        contentPadding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0.0),
+        child: CheckboxListTile(
+          title: Text(
+            task.description,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+              decoration:
+                  task.done ? TextDecoration.lineThrough : TextDecoration.none,
+            ),
           ),
+          selected: task.done,
+          value: task.done,
+          onChanged: (newValue) {
+            context.read<TasksModel>().setTaskDonenes(taskIndexInList, newValue);
+          },
         ),
-        selected: task.done,
-        value: task.done,
-        onChanged: (newValue) {
-          context.read<TasksModel>().setTaskDonenes(taskIndexInList, newValue);
-        },
       ),
     );
   }
